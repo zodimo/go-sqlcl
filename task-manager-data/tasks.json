@@ -267,14 +267,14 @@
       "id": "1d449b82-dc59-44f6-a36c-fcee43d9d44d",
       "name": "Create SQLcl-specific Command Wrappers",
       "description": "Implement wrappers for SQLcl-specific commands (like SET, DESCRIBE, etc.) to provide a more idiomatic Go interface for these commands. This will make it easier for users to work with SQLcl-specific functionality.",
-      "status": "待處理",
+      "status": "已完成",
       "dependencies": [
         {
           "taskId": "b3768d80-6a78-4efb-91bb-4df21fdfde95"
         }
       ],
       "createdAt": "2025-05-01T12:53:48.081Z",
-      "updatedAt": "2025-05-01T12:53:48.081Z",
+      "updatedAt": "2025-05-01T15:44:01.481Z",
       "relatedFiles": [
         {
           "path": "pkg/sqlcl/commands.go",
@@ -283,7 +283,9 @@
         }
       ],
       "implementationGuide": "1. Create `pkg/sqlcl/commands.go` with wrapper functions for SQLcl-specific commands.\n2. Implement wrappers for commands such as:\n   - SET (to configure SQLcl options)\n   - DESCRIBE (to describe database objects)\n   - HELP (to get help information)\n   - HISTORY (to view command history)\n3. Ensure all wrappers return structured data where appropriate\n4. Document all wrapper functions",
-      "verificationCriteria": "- Wrappers are provided for common SQLcl-specific commands\n- Wrappers return structured data where appropriate\n- All wrappers are well-documented\n- Wrappers provide an idiomatic Go interface"
+      "verificationCriteria": "- Wrappers are provided for common SQLcl-specific commands\n- Wrappers return structured data where appropriate\n- All wrappers are well-documented\n- Wrappers provide an idiomatic Go interface",
+      "completedAt": "2025-05-01T15:44:01.479Z",
+      "summary": "Successfully implemented SQLcl-specific command wrappers in pkg/sqlcl/commands.go. Created wrappers for SET commands (with both generic and specific methods), SHOW command, DESCRIBE command (with structured output), HELP command, and HISTORY command. All wrappers follow idiomatic Go practices with proper error handling, context support, and thread safety using mutex locks. Added documentation for all functions and types. Created unit tests for the helper functions and a comprehensive example application demonstrating all wrappers in examples/commands/main.go with accompanying README.md."
     },
     {
       "id": "62ab8ba9-3c68-44b5-aadc-93b1e38aa5f0",

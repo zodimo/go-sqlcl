@@ -73,7 +73,7 @@ func main() {
 
 		// This is just to demonstrate the code structure
 		// In a real scenario, we would exit here
-		fmt.Println("\n--- Demo Mode (no actual database connection) ---\n")
+		fmt.Println("\n--- Demo Mode (no actual database connection) ---")
 	} else {
 		// Connect with the provided options
 		err = client.ConnectWithOptions(ctx, connectionOpts)

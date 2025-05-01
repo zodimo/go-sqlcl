@@ -171,14 +171,14 @@
       "id": "b84af7f9-b5a3-44d4-ae6b-5054695aeb45",
       "name": "Create Basic Example",
       "description": "Create a basic example of using the go-sqlcl package to connect to a database and execute a simple query. This will serve as both a test of the package and documentation for users.",
-      "status": "待處理",
+      "status": "已完成",
       "dependencies": [
         {
           "taskId": "b3768d80-6a78-4efb-91bb-4df21fdfde95"
         }
       ],
       "createdAt": "2025-05-01T12:53:23.983Z",
-      "updatedAt": "2025-05-01T12:53:23.983Z",
+      "updatedAt": "2025-05-01T14:15:34.606Z",
       "relatedFiles": [
         {
           "path": "examples/basic/main.go",
@@ -187,7 +187,9 @@
         }
       ],
       "implementationGuide": "1. Create `examples/basic/main.go` with a simple example of using the package.\n2. Include examples of:\n   - Creating a client\n   - Connecting to a database\n   - Executing a simple query\n   - Handling errors\n3. Add clear comments explaining each step",
-      "verificationCriteria": "- The example runs successfully\n- It demonstrates basic usage of the package\n- It includes error handling\n- It is well-commented"
+      "verificationCriteria": "- The example runs successfully\n- It demonstrates basic usage of the package\n- It includes error handling\n- It is well-commented",
+      "completedAt": "2025-05-01T14:15:34.605Z",
+      "summary": "Created a comprehensive basic example in examples/basic/main.go that demonstrates all key features of the go-sqlcl package including client creation, database connection, query execution, and error handling. The example uses environment variables for credentials, includes detailed error handling for different Oracle error codes, and demonstrates both regular SQL queries and SQLCL-specific commands. Added a README.md with clear instructions for running the example and explanation of the demo mode for users who don't have an actual database connection. All code is thoroughly commented to explain each step of the process."
     },
     {
       "id": "9b89afc9-44b1-4191-9cc9-89ff34b53fdd",

@@ -291,14 +291,14 @@
       "id": "62ab8ba9-3c68-44b5-aadc-93b1e38aa5f0",
       "name": "Create Integration Tests",
       "description": "Create integration tests that test the package against a real SQLcl installation. These tests will verify that the package works correctly with the actual SQLcl binary.",
-      "status": "待處理",
+      "status": "已完成",
       "dependencies": [
         {
           "taskId": "b84af7f9-b5a3-44d4-ae6b-5054695aeb45"
         }
       ],
       "createdAt": "2025-05-01T12:53:48.081Z",
-      "updatedAt": "2025-05-01T12:53:48.081Z",
+      "updatedAt": "2025-05-01T15:53:55.533Z",
       "relatedFiles": [
         {
           "path": "test/integration/integration_test.go",
@@ -307,7 +307,9 @@
         }
       ],
       "implementationGuide": "1. Create `test/integration/integration_test.go` with integration tests.\n2. Create a test setup that:\n   - Detects the SQLcl installation\n   - Creates a test environment\n   - Cleans up after tests\n3. Test scenarios including:\n   - Connecting to a database\n   - Executing SQL queries\n   - Running SQLcl-specific commands\n   - Handling errors\n4. Use a configuration file to specify test parameters (SQLcl path, connection details, etc.)",
-      "verificationCriteria": "- Integration tests cover all major functionality\n- Tests can be run against a real SQLcl installation\n- Test environment is set up and cleaned up properly\n- Tests are robust and handle different SQLcl versions and configurations"
+      "verificationCriteria": "- Integration tests cover all major functionality\n- Tests can be run against a real SQLcl installation\n- Test environment is set up and cleaned up properly\n- Tests are robust and handle different SQLcl versions and configurations",
+      "completedAt": "2025-05-01T15:53:55.531Z",
+      "summary": "Created comprehensive integration tests in the test/integration directory. The tests cover all aspects of the go-sqlcl package when used with an actual SQLcl installation, including client creation, database connection, SQL query execution, transaction support, error handling, and SQLcl-specific commands. The tests are designed to be robust, skipping tests that require database connection when not available and using appropriate timeouts. The implementation includes a configuration file that loads settings from environment variables, detailed tests with proper assertions, and a README with instructions for running the tests."
     },
     {
       "id": "727a100b-a6c4-4e81-ad03-629100b7446e",

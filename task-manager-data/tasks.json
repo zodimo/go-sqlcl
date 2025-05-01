@@ -243,14 +243,14 @@
       "id": "ccdbe758-4be7-4322-bd1a-7b562d44a0f8",
       "name": "Write Unit Tests for Output Parser",
       "description": "Create unit tests for the Output Parser to ensure it correctly parses SQLCL output into structured data. These tests will use sample SQLCL output to test the parser in isolation.",
-      "status": "待處理",
+      "status": "已完成",
       "dependencies": [
         {
           "taskId": "0b130d7f-529c-4b89-8e99-c3b4e9c5c761"
         }
       ],
       "createdAt": "2025-05-01T12:53:48.081Z",
-      "updatedAt": "2025-05-01T12:53:48.081Z",
+      "updatedAt": "2025-05-01T15:30:24.986Z",
       "relatedFiles": [
         {
           "path": "internal/parser/output_parser_test.go",
@@ -259,7 +259,9 @@
         }
       ],
       "implementationGuide": "1. Create `internal/parser/output_parser_test.go` with unit tests for the Output Parser.\n2. Create sample SQLCL outputs for testing different scenarios.\n3. Test scenarios including:\n   - Parsing SQL query results\n   - Extracting error messages\n   - Detecting command completion\n   - Handling different output formats\n4. Ensure all tests are isolated and use predefined sample outputs",
-      "verificationCriteria": "- All parser functionality is covered by tests\n- Tests run successfully with predefined sample outputs\n- Edge cases and error conditions are tested\n- Tests are isolated and do not depend on external resources"
+      "verificationCriteria": "- All parser functionality is covered by tests\n- Tests run successfully with predefined sample outputs\n- Edge cases and error conditions are tested\n- Tests are isolated and do not depend on external resources",
+      "completedAt": "2025-05-01T15:30:24.983Z",
+      "summary": "Successfully implemented comprehensive unit tests for the Output Parser in `internal/parser/output_parser_test.go`. The tests cover all key functionality including:\n\n1. Testing different output formats (table, column, JSON)\n2. Error parsing and extraction\n3. Command status parsing (success/failure, rows affected)\n4. Helper methods (cleanOutput, parseColumnHeaders, etc.)\n5. Edge cases such as no rows returned\n\nUsed mocking techniques to create isolated tests that don't depend on external resources. All tests are passing, confirming that the Output Parser correctly parses SQLCL output into structured data."
     },
     {
       "id": "1d449b82-dc59-44f6-a36c-fcee43d9d44d",

@@ -1,0 +1,354 @@
+{
+  "tasks": [
+    {
+      "id": "f9054431-7829-4acd-8484-40c27679118d",
+      "name": "Setup basic project structure",
+      "description": "Create the initial directory structure for the go-sqlcl project following the standard Go project layout and the project rules. This includes setting up the main directories, creating a go.mod file, and adding an initial README with basic usage instructions.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-01T12:53:00.790Z",
+      "updatedAt": "2025-05-01T12:54:56.774Z",
+      "implementationGuide": "1. Create the following directory structure:\n   - cmd/: For CLI applications\n   - internal/: For private package code\n   - pkg/: For public API packages\n   - test/: For integration tests\n   - docs/: For documentation\n   - examples/: For example code\n\n2. Create a go.mod file in the root directory:\n```go\nmodule github.com/zodimo/go-sqlcl\n\ngo 1.24\n```\n\n3. Update the README.md with more detailed information about the project, including basic usage examples and requirements.",
+      "verificationCriteria": "- All required directories exist\n- The go.mod file is correctly configured with the appropriate module name and Go version\n- The README.md contains detailed information about the project",
+      "completedAt": "2025-05-01T12:54:56.773Z",
+      "summary": "Successfully created the basic directory structure for the go-sqlcl project, including cmd/, internal/, pkg/, test/, docs/, and examples/ directories. Created a properly configured go.mod file with the correct module name (github.com/zodimo/go-sqlcl) and Go version (1.24). Updated the README.md with comprehensive information about the project, including an overview, requirements, installation instructions, basic usage examples, and links to documentation resources. All verification criteria have been met."
+    },
+    {
+      "id": "cc44fc5e-ba43-4e96-b726-bccb88d0e274",
+      "name": "Implement SQLCL Process Manager",
+      "description": "Create a package that handles starting, stopping, and monitoring the SQLCL process. This component is responsible for managing the lifecycle of the SQLCL process and setting up the communication channels (stdin, stdout, stderr).",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-01T12:53:00.790Z",
+      "updatedAt": "2025-05-01T13:15:39.731Z",
+      "relatedFiles": [
+        {
+          "path": "internal/process/sqlcl_process.go",
+          "type": "CREATE",
+          "description": "Core implementation of the SQLCL process manager"
+        }
+      ],
+      "implementationGuide": "1. Create `internal/process/sqlcl_process.go` with the SQLCLProcess struct and methods to start and stop the process.\n2. Implement functions to:\n   - Create a new SQLCLProcess instance with a path to the SQLCL binary\n   - Start the process with proper pipes for stdin, stdout, and stderr\n   - Send commands to the process\n   - Read output from the process\n   - Gracefully terminate the process\n   - Handle process errors\n3. Add proper synchronization to make the process manager thread-safe\n4. Implement timeout handling for long-running operations",
+      "verificationCriteria": "- The SQLCLProcess can start and stop the SQLCL process\n- Communication with the process via stdin, stdout, and stderr works correctly\n- The process manager is thread-safe\n- Timeouts are properly handled\n- Resources are correctly cleaned up when the process is terminated",
+      "completedAt": "2025-05-01T13:15:39.729Z",
+      "summary": "Successfully implemented the SQLCL Process Manager in the internal/process/sqlcl_process.go file. This implementation includes a comprehensive set of features:\n\n1. The SQLCLProcess struct and methods for creating, starting, and stopping the SQLcl process\n2. Proper setup of stdin, stdout, and stderr pipes for communication with the process\n3. Thread-safety through mutex synchronization\n4. Timeout handling for all operations using context\n5. Graceful process termination and resource cleanup\n6. Error handling for all operations\n7. Configurable options for path, timeout, and arguments using functional options pattern\n\nThe implementation successfully addresses all verification criteria, including process lifecycle management, communication channels, thread safety, timeout handling, and resource cleanup. The code follows Go best practices and is well-documented."
+    },
+    {
+      "id": "3d46300a-ad35-457f-8b1f-00f86ec36afd",
+      "name": "Create Command Executor",
+      "description": "Implement a command executor that can send commands to the SQLCL process and process the responses. This component interacts with the SQLCL Process Manager to execute commands and retrieve the output.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "cc44fc5e-ba43-4e96-b726-bccb88d0e274"
+        }
+      ],
+      "createdAt": "2025-05-01T12:53:00.790Z",
+      "updatedAt": "2025-05-01T13:16:40.633Z",
+      "relatedFiles": [
+        {
+          "path": "internal/executor/command_executor.go",
+          "type": "CREATE",
+          "description": "Core implementation of the command executor"
+        }
+      ],
+      "implementationGuide": "1. Create `internal/executor/command_executor.go` with the CommandExecutor struct and methods.\n2. Implement functions to:\n   - Create a new CommandExecutor instance with a reference to a SQLCLProcess\n   - Execute a command and return the result\n   - Handle command timeouts\n   - Detect when a command has completed execution\n   - Handle different command types (SQL queries, DDL, SQLcl commands)\n3. Add proper error handling for execution errors",
+      "verificationCriteria": "- The CommandExecutor can send commands to the SQLCL process\n- Command results are correctly captured and returned\n- Command timeouts are properly handled\n- The executor can detect when a command has completed execution\n- Different command types are handled correctly",
+      "completedAt": "2025-05-01T13:16:40.632Z",
+      "summary": "Successfully implemented the Command Executor in the internal/executor/command_executor.go file. The implementation includes:\n\n1. A CommandExecutor struct that works with the SQLCLProcess to execute commands\n2. Methods to execute different types of commands (SQL queries, DDL, SQLcl-specific commands)\n3. Command result handling with output, error information, success status, and execution duration\n4. Command type detection based on command prefixes\n5. Error detection in command output\n6. Thread-safety through mutex synchronization\n7. Timeout handling using context\n8. Configurable options for timeout and prompt pattern\n\nThe implementation meets all verification criteria, including sending commands to the SQLcl process, capturing command results, handling timeouts, detecting command completion, and handling different command types. The code follows Go best practices, is well-documented, and integrates seamlessly with the previously implemented SQLCLProcess."
+    },
+    {
+      "id": "0b130d7f-529c-4b89-8e99-c3b4e9c5c761",
+      "name": "Implement Output Parser",
+      "description": "Create a parser for SQLCL output that can convert the text output into structured data. This component is responsible for extracting meaningful data from the SQLCL output, including query results, error messages, and status information.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-01T12:53:00.790Z",
+      "updatedAt": "2025-05-01T13:23:48.596Z",
+      "relatedFiles": [
+        {
+          "path": "internal/parser/output_parser.go",
+          "type": "CREATE",
+          "description": "Core implementation of the output parser"
+        }
+      ],
+      "implementationGuide": "1. Create `internal/parser/output_parser.go` with the OutputParser struct and methods.\n2. Implement functions to:\n   - Parse SQL query results into structured data (rows and columns)\n   - Extract error messages and codes from error output\n   - Detect command completion and success/failure status\n   - Handle different output formats (table, CSV, JSON)\n3. Create appropriate data structures to represent parsed results",
+      "verificationCriteria": "- The OutputParser can parse SQL query results into structured data\n- Error messages and codes are correctly extracted\n- Command completion and status are correctly detected\n- Different output formats are handled correctly",
+      "completedAt": "2025-05-01T13:23:48.593Z",
+      "summary": "Successfully implemented the Output Parser in the internal/parser/output_parser.go file. The implementation handles parsing of SQL query results into structured data, extracts error messages and codes, detects command completion and success/failure status, and handles different output formats including tabular, column-based, and JSON formats. Comprehensive unit tests have been created to validate the functionality of all parsing methods."
+    },
+    {
+      "id": "dbff6239-8db7-4921-bd4b-831c932c41ff",
+      "name": "Define public API data types",
+      "description": "Define the data types that will be exposed in the public API. This includes result types for queries, error types, and configuration types.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-01T12:53:00.790Z",
+      "updatedAt": "2025-05-01T13:30:40.517Z",
+      "relatedFiles": [
+        {
+          "path": "pkg/types/types.go",
+          "type": "CREATE",
+          "description": "Public API data types"
+        }
+      ],
+      "implementationGuide": "1. Create `pkg/types/types.go` with the necessary public data types.\n2. Define types for:\n   - Query results (rows and columns)\n   - Connection options\n   - Configuration options\n   - Error types\n3. Add proper documentation for all exported types",
+      "verificationCriteria": "- All necessary data types are defined\n- Types are well-documented\n- Types are appropriate for the public API",
+      "completedAt": "2025-05-01T13:30:40.515Z",
+      "summary": "Successfully created the pkg/types/types.go file with all necessary public API data types. Defined and documented types for query results (columns and rows), connection options, client configuration, commands, error codes, and errors. Also defined a Client interface that will be implemented by the SQLcl client. All types are well-documented with comments explaining their purpose and properties."
+    },
+    {
+      "id": "b3768d80-6a78-4efb-91bb-4df21fdfde95",
+      "name": "Implement Client API",
+      "description": "Create the main client API that will be used by end users. This component provides a clean, idiomatic Go interface for interacting with SQLCL. It should expose methods for connecting to databases, executing SQL queries, and running SQLCL commands.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "3d46300a-ad35-457f-8b1f-00f86ec36afd"
+        },
+        {
+          "taskId": "0b130d7f-529c-4b89-8e99-c3b4e9c5c761"
+        },
+        {
+          "taskId": "dbff6239-8db7-4921-bd4b-831c932c41ff"
+        }
+      ],
+      "createdAt": "2025-05-01T12:53:23.983Z",
+      "updatedAt": "2025-05-01T13:42:01.540Z",
+      "relatedFiles": [
+        {
+          "path": "pkg/sqlcl/client.go",
+          "type": "CREATE",
+          "description": "Main client API implementation"
+        }
+      ],
+      "implementationGuide": "1. Create `pkg/sqlcl/client.go` with the Client struct and methods.\n2. Implement functions to:\n   - Create a new Client instance\n   - Connect to a database\n   - Execute SQL queries and return structured results\n   - Run SQLCL-specific commands\n   - Handle error conditions\n3. Ensure all methods are properly documented\n4. Make the client thread-safe",
+      "verificationCriteria": "- The Client can connect to a database\n- SQL queries can be executed and results are returned in a structured format\n- SQLCL-specific commands can be executed\n- All methods are properly documented\n- The client is thread-safe",
+      "completedAt": "2025-05-01T13:42:01.537Z",
+      "summary": "Successfully implemented the Client API in pkg/sqlcl/client.go. The implementation includes methods for connecting to databases with different options, executing SQL queries and returning structured results, running SQLCL-specific commands, and properly handling errors. All methods are documented and thread-safe using mutexes to protect shared resources. Additional features include parameter binding, timeout management, and resource cleanup."
+    },
+    {
+      "id": "7f57bc8e-eeb9-4b71-a789-048c6eb15dc4",
+      "name": "Implement Error Handling",
+      "description": "Create custom error types and error handling mechanisms for the package. This includes parsing error messages from SQLCL output, creating appropriate error types, and providing context for errors.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-01T12:53:23.983Z",
+      "updatedAt": "2025-05-01T13:48:57.782Z",
+      "relatedFiles": [
+        {
+          "path": "pkg/errors/errors.go",
+          "type": "CREATE",
+          "description": "Custom error types and error handling"
+        }
+      ],
+      "implementationGuide": "1. Create `pkg/errors/errors.go` with custom error types.\n2. Implement error types for:\n   - Connection errors\n   - SQL execution errors\n   - SQLCL process errors\n   - Timeout errors\n3. Add functions to extract error information from SQLCL output\n4. Ensure all errors provide meaningful context",
+      "verificationCriteria": "- Custom error types are defined for different error scenarios\n- Error information is extracted from SQLCL output\n- Errors provide meaningful context\n- Errors can be handled appropriately by client code",
+      "completedAt": "2025-05-01T13:48:57.781Z",
+      "summary": "Implemented comprehensive error handling for the go-sqlcl package. Created a custom Error type with seven different error categories (ConnectionError, SQLError, ProcessError, TimeoutError, ParserError, ConfigError, and UnknownError). Implemented functionality to extract error information from SQLCL output, including Oracle error codes, line numbers, and positions. Added utility functions for error checking and handling. Created tests for all error functionality and added documentation for the package. All tests pass successfully."
+    },
+    {
+      "id": "88e45af5-189a-4b2e-8efe-a7c47373a6c9",
+      "name": "Create Config Package",
+      "description": "Implement a configuration package that allows users to customize the behavior of the SQLCL process and client. This includes options for SQLCL path, timeout values, and other settings.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-01T12:53:23.983Z",
+      "updatedAt": "2025-05-01T13:52:39.682Z",
+      "relatedFiles": [
+        {
+          "path": "pkg/config/config.go",
+          "type": "CREATE",
+          "description": "Configuration package"
+        }
+      ],
+      "implementationGuide": "1. Create `pkg/config/config.go` with configuration types and functions.\n2. Implement options for:\n   - SQLCL binary path\n   - Timeout values\n   - Output format preferences\n   - Connection options\n3. Create a functional options pattern for configuration\n4. Provide sensible defaults for all settings",
+      "verificationCriteria": "- Configuration options are available for customizing behavior\n- A functional options pattern is implemented\n- Sensible defaults are provided\n- Configuration is well-documented",
+      "completedAt": "2025-05-01T13:52:39.680Z",
+      "summary": "Successfully implemented the Configuration package using the functional options pattern in pkg/config/config.go. Created all required configuration options including SQLcl path, timeout values, output formatting, and connection options. Provided sensible defaults for all settings and created comprehensive documentation. Added a README.md explaining usage patterns and an example demonstrating how to use the package in examples/config/main.go."
+    },
+    {
+      "id": "b84af7f9-b5a3-44d4-ae6b-5054695aeb45",
+      "name": "Create Basic Example",
+      "description": "Create a basic example of using the go-sqlcl package to connect to a database and execute a simple query. This will serve as both a test of the package and documentation for users.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "b3768d80-6a78-4efb-91bb-4df21fdfde95"
+        }
+      ],
+      "createdAt": "2025-05-01T12:53:23.983Z",
+      "updatedAt": "2025-05-01T14:15:34.606Z",
+      "relatedFiles": [
+        {
+          "path": "examples/basic/main.go",
+          "type": "CREATE",
+          "description": "Basic example of using the package"
+        }
+      ],
+      "implementationGuide": "1. Create `examples/basic/main.go` with a simple example of using the package.\n2. Include examples of:\n   - Creating a client\n   - Connecting to a database\n   - Executing a simple query\n   - Handling errors\n3. Add clear comments explaining each step",
+      "verificationCriteria": "- The example runs successfully\n- It demonstrates basic usage of the package\n- It includes error handling\n- It is well-commented",
+      "completedAt": "2025-05-01T14:15:34.605Z",
+      "summary": "Created a comprehensive basic example in examples/basic/main.go that demonstrates all key features of the go-sqlcl package including client creation, database connection, query execution, and error handling. The example uses environment variables for credentials, includes detailed error handling for different Oracle error codes, and demonstrates both regular SQL queries and SQLCL-specific commands. Added a README.md with clear instructions for running the example and explanation of the demo mode for users who don't have an actual database connection. All code is thoroughly commented to explain each step of the process."
+    },
+    {
+      "id": "9b89afc9-44b1-4191-9cc9-89ff34b53fdd",
+      "name": "Write Unit Tests for Process Manager",
+      "description": "Create unit tests for the SQLCL Process Manager to ensure it correctly starts, stops, and communicates with the SQLCL process. These tests will mock the actual SQLCL process to test the process manager in isolation.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "cc44fc5e-ba43-4e96-b726-bccb88d0e274"
+        }
+      ],
+      "createdAt": "2025-05-01T12:53:23.983Z",
+      "updatedAt": "2025-05-01T15:00:17.880Z",
+      "relatedFiles": [
+        {
+          "path": "internal/process/sqlcl_process_test.go",
+          "type": "CREATE",
+          "description": "Unit tests for the SQLCL Process Manager"
+        }
+      ],
+      "implementationGuide": "1. Create `internal/process/sqlcl_process_test.go` with unit tests for the SQLCL Process Manager.\n2. Create mock implementations of the external process for testing.\n3. Test scenarios including:\n   - Starting and stopping the process\n   - Sending commands and receiving responses\n   - Handling process errors\n   - Timeout handling\n4. Ensure all tests are isolated and do not require a real SQLCL installation",
+      "verificationCriteria": "- All process manager functionality is covered by tests\n- Tests run successfully without a real SQLCL installation\n- Edge cases and error conditions are tested\n- Tests are isolated and do not depend on external resources",
+      "completedAt": "2025-05-01T15:00:17.879Z",
+      "summary": "Successfully implemented comprehensive unit tests for the SQLCL Process Manager. Created a mockPipe implementation to simulate stdin/stdout/stderr pipes. Tests cover all core functionality including starting, stopping, sending commands, and reading output with proper error handling and timeout scenarios. All tests run successfully without requiring a real SQLCL installation."
+    },
+    {
+      "id": "abb24528-85f0-4f5d-a783-d00c051642a2",
+      "name": "Write Unit Tests for Command Executor",
+      "description": "Create unit tests for the Command Executor to ensure it correctly sends commands to the SQLCL process and processes the responses. These tests will mock the SQLCL Process Manager to test the executor in isolation.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "3d46300a-ad35-457f-8b1f-00f86ec36afd"
+        }
+      ],
+      "createdAt": "2025-05-01T12:53:48.081Z",
+      "updatedAt": "2025-05-01T15:11:14.655Z",
+      "relatedFiles": [
+        {
+          "path": "internal/executor/command_executor_test.go",
+          "type": "CREATE",
+          "description": "Unit tests for the Command Executor"
+        }
+      ],
+      "implementationGuide": "1. Create `internal/executor/command_executor_test.go` with unit tests for the Command Executor.\n2. Create mock implementations of the SQLCL Process Manager for testing.\n3. Test scenarios including:\n   - Executing different types of commands\n   - Handling command timeouts\n   - Detecting command completion\n   - Handling errors from the process\n4. Ensure all tests are isolated and do not require a real SQLCL installation",
+      "verificationCriteria": "- All command executor functionality is covered by tests\n- Tests run successfully without a real SQLCL installation\n- Edge cases and error conditions are tested\n- Tests are isolated and do not depend on external resources",
+      "completedAt": "2025-05-01T15:11:14.653Z",
+      "summary": "Successfully implemented comprehensive unit tests for the Command Executor. The implementation includes:\n\n1. Created a MockSQLCLProcess that implements the required SQLCLProcessInterface\n2. Refactored the CommandExecutor to use an interface instead of a concrete type for better testability \n3. Implemented 16 different test cases covering:\n   - Basic command execution\n   - Error detection and handling\n   - Command timeouts\n   - Different command types (SQL queries, DDL, SQLcl commands)\n   - Process state handling\n   - Edge cases such as nil process, errors in various stages\n4. Used fluent builder pattern for the mock to make tests more readable and maintainable\n5. Made all tests isolated with no dependency on actual SQLCl installation\n\nThe tests ensure all the functionality of the CommandExecutor is working as expected and are robust against edge cases and error conditions."
+    },
+    {
+      "id": "ccdbe758-4be7-4322-bd1a-7b562d44a0f8",
+      "name": "Write Unit Tests for Output Parser",
+      "description": "Create unit tests for the Output Parser to ensure it correctly parses SQLCL output into structured data. These tests will use sample SQLCL output to test the parser in isolation.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "0b130d7f-529c-4b89-8e99-c3b4e9c5c761"
+        }
+      ],
+      "createdAt": "2025-05-01T12:53:48.081Z",
+      "updatedAt": "2025-05-01T15:30:24.986Z",
+      "relatedFiles": [
+        {
+          "path": "internal/parser/output_parser_test.go",
+          "type": "CREATE",
+          "description": "Unit tests for the Output Parser"
+        }
+      ],
+      "implementationGuide": "1. Create `internal/parser/output_parser_test.go` with unit tests for the Output Parser.\n2. Create sample SQLCL outputs for testing different scenarios.\n3. Test scenarios including:\n   - Parsing SQL query results\n   - Extracting error messages\n   - Detecting command completion\n   - Handling different output formats\n4. Ensure all tests are isolated and use predefined sample outputs",
+      "verificationCriteria": "- All parser functionality is covered by tests\n- Tests run successfully with predefined sample outputs\n- Edge cases and error conditions are tested\n- Tests are isolated and do not depend on external resources",
+      "completedAt": "2025-05-01T15:30:24.983Z",
+      "summary": "Successfully implemented comprehensive unit tests for the Output Parser in `internal/parser/output_parser_test.go`. The tests cover all key functionality including:\n\n1. Testing different output formats (table, column, JSON)\n2. Error parsing and extraction\n3. Command status parsing (success/failure, rows affected)\n4. Helper methods (cleanOutput, parseColumnHeaders, etc.)\n5. Edge cases such as no rows returned\n\nUsed mocking techniques to create isolated tests that don't depend on external resources. All tests are passing, confirming that the Output Parser correctly parses SQLCL output into structured data."
+    },
+    {
+      "id": "1d449b82-dc59-44f6-a36c-fcee43d9d44d",
+      "name": "Create SQLcl-specific Command Wrappers",
+      "description": "Implement wrappers for SQLcl-specific commands (like SET, DESCRIBE, etc.) to provide a more idiomatic Go interface for these commands. This will make it easier for users to work with SQLcl-specific functionality.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "b3768d80-6a78-4efb-91bb-4df21fdfde95"
+        }
+      ],
+      "createdAt": "2025-05-01T12:53:48.081Z",
+      "updatedAt": "2025-05-01T15:44:01.481Z",
+      "relatedFiles": [
+        {
+          "path": "pkg/sqlcl/commands.go",
+          "type": "CREATE",
+          "description": "Wrappers for SQLcl-specific commands"
+        }
+      ],
+      "implementationGuide": "1. Create `pkg/sqlcl/commands.go` with wrapper functions for SQLcl-specific commands.\n2. Implement wrappers for commands such as:\n   - SET (to configure SQLcl options)\n   - DESCRIBE (to describe database objects)\n   - HELP (to get help information)\n   - HISTORY (to view command history)\n3. Ensure all wrappers return structured data where appropriate\n4. Document all wrapper functions",
+      "verificationCriteria": "- Wrappers are provided for common SQLcl-specific commands\n- Wrappers return structured data where appropriate\n- All wrappers are well-documented\n- Wrappers provide an idiomatic Go interface",
+      "completedAt": "2025-05-01T15:44:01.479Z",
+      "summary": "Successfully implemented SQLcl-specific command wrappers in pkg/sqlcl/commands.go. Created wrappers for SET commands (with both generic and specific methods), SHOW command, DESCRIBE command (with structured output), HELP command, and HISTORY command. All wrappers follow idiomatic Go practices with proper error handling, context support, and thread safety using mutex locks. Added documentation for all functions and types. Created unit tests for the helper functions and a comprehensive example application demonstrating all wrappers in examples/commands/main.go with accompanying README.md."
+    },
+    {
+      "id": "62ab8ba9-3c68-44b5-aadc-93b1e38aa5f0",
+      "name": "Create Integration Tests",
+      "description": "Create integration tests that test the package against a real SQLcl installation. These tests will verify that the package works correctly with the actual SQLcl binary.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "b84af7f9-b5a3-44d4-ae6b-5054695aeb45"
+        }
+      ],
+      "createdAt": "2025-05-01T12:53:48.081Z",
+      "updatedAt": "2025-05-01T15:53:55.533Z",
+      "relatedFiles": [
+        {
+          "path": "test/integration/integration_test.go",
+          "type": "CREATE",
+          "description": "Integration tests for the package"
+        }
+      ],
+      "implementationGuide": "1. Create `test/integration/integration_test.go` with integration tests.\n2. Create a test setup that:\n   - Detects the SQLcl installation\n   - Creates a test environment\n   - Cleans up after tests\n3. Test scenarios including:\n   - Connecting to a database\n   - Executing SQL queries\n   - Running SQLcl-specific commands\n   - Handling errors\n4. Use a configuration file to specify test parameters (SQLcl path, connection details, etc.)",
+      "verificationCriteria": "- Integration tests cover all major functionality\n- Tests can be run against a real SQLcl installation\n- Test environment is set up and cleaned up properly\n- Tests are robust and handle different SQLcl versions and configurations",
+      "completedAt": "2025-05-01T15:53:55.531Z",
+      "summary": "Created comprehensive integration tests in the test/integration directory. The tests cover all aspects of the go-sqlcl package when used with an actual SQLcl installation, including client creation, database connection, SQL query execution, transaction support, error handling, and SQLcl-specific commands. The tests are designed to be robust, skipping tests that require database connection when not available and using appropriate timeouts. The implementation includes a configuration file that loads settings from environment variables, detailed tests with proper assertions, and a README with instructions for running the tests."
+    },
+    {
+      "id": "727a100b-a6c4-4e81-ad03-629100b7446e",
+      "name": "Write Documentation",
+      "description": "Create comprehensive documentation for the package, including usage examples, API documentation, and a user guide. This will help users understand how to use the package effectively.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "b84af7f9-b5a3-44d4-ae6b-5054695aeb45"
+        }
+      ],
+      "createdAt": "2025-05-01T12:53:48.081Z",
+      "updatedAt": "2025-05-01T16:00:41.044Z",
+      "relatedFiles": [
+        {
+          "path": "docs/README.md",
+          "type": "CREATE",
+          "description": "Overview of the package"
+        },
+        {
+          "path": "docs/USAGE.md",
+          "type": "CREATE",
+          "description": "Detailed usage instructions"
+        },
+        {
+          "path": "docs/API.md",
+          "type": "CREATE",
+          "description": "API documentation"
+        },
+        {
+          "path": "docs/EXAMPLES.md",
+          "type": "CREATE",
+          "description": "Additional examples"
+        }
+      ],
+      "implementationGuide": "1. Create `docs/README.md` with an overview of the package.\n2. Create `docs/USAGE.md` with detailed usage instructions.\n3. Create `docs/API.md` with API documentation.\n4. Create `docs/EXAMPLES.md` with additional examples beyond the basic example.\n5. Ensure all documentation is clear, concise, and includes examples.",
+      "verificationCriteria": "- Documentation is comprehensive and covers all aspects of the package\n- Usage instructions are clear and include examples\n- API documentation is complete and accurate\n- Examples demonstrate different use cases and scenarios",
+      "completedAt": "2025-05-01T16:00:41.043Z",
+      "summary": "Created comprehensive documentation for the go-sqlcl package including README.md with package overview, API.md with detailed API documentation, USAGE.md with clear usage instructions, and EXAMPLES.md with various usage scenarios. All documentation files provide clear, concise, and practical information with code examples to help users understand and effectively use the package."
+    }
+  ]
+}

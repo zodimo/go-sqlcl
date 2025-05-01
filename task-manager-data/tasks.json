@@ -195,14 +195,14 @@
       "id": "9b89afc9-44b1-4191-9cc9-89ff34b53fdd",
       "name": "Write Unit Tests for Process Manager",
       "description": "Create unit tests for the SQLCL Process Manager to ensure it correctly starts, stops, and communicates with the SQLCL process. These tests will mock the actual SQLCL process to test the process manager in isolation.",
-      "status": "待處理",
+      "status": "已完成",
       "dependencies": [
         {
           "taskId": "cc44fc5e-ba43-4e96-b726-bccb88d0e274"
         }
       ],
       "createdAt": "2025-05-01T12:53:23.983Z",
-      "updatedAt": "2025-05-01T12:53:23.983Z",
+      "updatedAt": "2025-05-01T15:00:17.880Z",
       "relatedFiles": [
         {
           "path": "internal/process/sqlcl_process_test.go",
@@ -211,7 +211,9 @@
         }
       ],
       "implementationGuide": "1. Create `internal/process/sqlcl_process_test.go` with unit tests for the SQLCL Process Manager.\n2. Create mock implementations of the external process for testing.\n3. Test scenarios including:\n   - Starting and stopping the process\n   - Sending commands and receiving responses\n   - Handling process errors\n   - Timeout handling\n4. Ensure all tests are isolated and do not require a real SQLCL installation",
-      "verificationCriteria": "- All process manager functionality is covered by tests\n- Tests run successfully without a real SQLCL installation\n- Edge cases and error conditions are tested\n- Tests are isolated and do not depend on external resources"
+      "verificationCriteria": "- All process manager functionality is covered by tests\n- Tests run successfully without a real SQLCL installation\n- Edge cases and error conditions are tested\n- Tests are isolated and do not depend on external resources",
+      "completedAt": "2025-05-01T15:00:17.879Z",
+      "summary": "Successfully implemented comprehensive unit tests for the SQLCL Process Manager. Created a mockPipe implementation to simulate stdin/stdout/stderr pipes. Tests cover all core functionality including starting, stopping, sending commands, and reading output with proper error handling and timeout scenarios. All tests run successfully without requiring a real SQLCL installation."
     },
     {
       "id": "abb24528-85f0-4f5d-a783-d00c051642a2",

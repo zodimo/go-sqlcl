@@ -64,9 +64,17 @@ func WithPromptPattern(pattern string) Option {
 	}
 }
 
+// SQLCLProcessInterface defines the interface required by CommandExecutor
+type SQLCLProcessInterface interface {
+	IsRunning() bool
+	SendCommand(ctx context.Context, command string) error
+	ReadOutput(ctx context.Context) (string, error)
+	ReadError(ctx context.Context) (string, error)
+}
+
 // CommandExecutor executes commands on a SQLcl process
 type CommandExecutor struct {
-	process       *process.SQLCLProcess
+	process       SQLCLProcessInterface
 	timeout       time.Duration
 	promptPattern *regexp.Regexp
 	mutex         sync.Mutex
@@ -79,7 +87,7 @@ const DefaultTimeout = 60 * time.Second
 const DefaultPromptPattern = `SQL>\s*$`
 
 // NewCommandExecutor creates a new CommandExecutor with the given SQLCLProcess
-func NewCommandExecutor(sqlclProcess *process.SQLCLProcess, options ...Option) *CommandExecutor {
+func NewCommandExecutor(sqlclProcess SQLCLProcessInterface, options ...Option) *CommandExecutor {
 	executor := &CommandExecutor{
 		process:       sqlclProcess,
 		timeout:       DefaultTimeout,

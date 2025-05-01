@@ -219,14 +219,14 @@
       "id": "abb24528-85f0-4f5d-a783-d00c051642a2",
       "name": "Write Unit Tests for Command Executor",
       "description": "Create unit tests for the Command Executor to ensure it correctly sends commands to the SQLCL process and processes the responses. These tests will mock the SQLCL Process Manager to test the executor in isolation.",
-      "status": "待處理",
+      "status": "已完成",
       "dependencies": [
         {
           "taskId": "3d46300a-ad35-457f-8b1f-00f86ec36afd"
         }
       ],
       "createdAt": "2025-05-01T12:53:48.081Z",
-      "updatedAt": "2025-05-01T12:53:48.081Z",
+      "updatedAt": "2025-05-01T15:11:14.655Z",
       "relatedFiles": [
         {
           "path": "internal/executor/command_executor_test.go",
@@ -235,7 +235,9 @@
         }
       ],
       "implementationGuide": "1. Create `internal/executor/command_executor_test.go` with unit tests for the Command Executor.\n2. Create mock implementations of the SQLCL Process Manager for testing.\n3. Test scenarios including:\n   - Executing different types of commands\n   - Handling command timeouts\n   - Detecting command completion\n   - Handling errors from the process\n4. Ensure all tests are isolated and do not require a real SQLCL installation",
-      "verificationCriteria": "- All command executor functionality is covered by tests\n- Tests run successfully without a real SQLCL installation\n- Edge cases and error conditions are tested\n- Tests are isolated and do not depend on external resources"
+      "verificationCriteria": "- All command executor functionality is covered by tests\n- Tests run successfully without a real SQLCL installation\n- Edge cases and error conditions are tested\n- Tests are isolated and do not depend on external resources",
+      "completedAt": "2025-05-01T15:11:14.653Z",
+      "summary": "Successfully implemented comprehensive unit tests for the Command Executor. The implementation includes:\n\n1. Created a MockSQLCLProcess that implements the required SQLCLProcessInterface\n2. Refactored the CommandExecutor to use an interface instead of a concrete type for better testability \n3. Implemented 16 different test cases covering:\n   - Basic command execution\n   - Error detection and handling\n   - Command timeouts\n   - Different command types (SQL queries, DDL, SQLcl commands)\n   - Process state handling\n   - Edge cases such as nil process, errors in various stages\n4. Used fluent builder pattern for the mock to make tests more readable and maintainable\n5. Made all tests isolated with no dependency on actual SQLCl installation\n\nThe tests ensure all the functionality of the CommandExecutor is working as expected and are robust against edge cases and error conditions."
     },
     {
       "id": "ccdbe758-4be7-4322-bd1a-7b562d44a0f8",

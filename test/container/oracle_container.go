@@ -15,7 +15,7 @@ import (
 
 const (
 	// Default Oracle XE container image
-	defaultOracleImage = "gvenzl/oracle-xe:latest"
+	defaultOracleImage = "gvenzl/oracle-xe:21-slim"
 
 	// Default Oracle ports
 	defaultOraclePort     = "1521"
@@ -52,7 +52,7 @@ type OracleContainerConfig struct {
 func DefaultOracleContainerConfig() *OracleContainerConfig {
 	return &OracleContainerConfig{
 		Image:          "gvenzl/oracle-xe",
-		Tag:            "18-slim",
+		Tag:            "21-slim",
 		Port:           defaultOraclePort,
 		HostPort:       defaultOracleHostPort,
 		User:           defaultUser,

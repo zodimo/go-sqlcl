@@ -16,7 +16,7 @@ func TestContainerConfigDefaults(t *testing.T) {
 	}
 
 	// The default image tag is now "18-slim" not "latest"
-	assert.Equal(t, "18-slim", cfg.ContainerConfig.Tag, "Default image tag should be 18-slim")
+	assert.Equal(t, "21-slim", cfg.ContainerConfig.Tag, "Default image tag should be 21-slim")
 	assert.Equal(t, "system", cfg.ContainerConfig.User, "Default username should be system")
 	assert.Equal(t, "oracle", cfg.ContainerConfig.Password, "Default password should be oracle")
 	assert.Equal(t, "gvenzl/oracle-xe", cfg.ContainerConfig.Image, "Default image should be gvenzl/oracle-xe")

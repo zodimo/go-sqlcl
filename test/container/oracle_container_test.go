@@ -13,7 +13,7 @@ import (
 func TestDefaultOracleContainerConfig(t *testing.T) {
 	config := DefaultOracleContainerConfig()
 	assert.Equal(t, "gvenzl/oracle-xe", config.Image, "Default image should be gvenzl/oracle-xe")
-	assert.Equal(t, "18-slim", config.Tag, "Default image tag should be 18-slim")
+	assert.Equal(t, "21-slim", config.Tag, "Default image tag should be 21-slim")
 	assert.Equal(t, "system", config.User, "Default username should be system")
 	assert.Equal(t, "oracle", config.Password, "Default password should be oracle")
 }

@@ -18,6 +18,9 @@ func TestConcurrentQueries(t *testing.T) {
 		t.Skip("Skipping container test as SKIP_CONTAINER_TESTS is set")
 	}
 
+	// Get the global context from the test main setup
+	ctx := GetGlobalContext()
+
 	// Create a test schema for concurrent query tests
 	schemaName := "concurrent_test"
 
@@ -35,7 +38,7 @@ func TestConcurrentQueries(t *testing.T) {
 		ALTER USER %[1]s QUOTA UNLIMITED ON USERS;
 	`, strings.ToUpper(schemaName))
 
-	result, err := setupClient.ExecuteSQL(globalCtx, createSchemaSQL)
+	result, err := setupClient.ExecuteSQL(ctx, createSchemaSQL)
 	require.NoError(t, err, "Failed to execute schema creation SQL")
 	require.True(t, result.Success, "Schema creation should be successful")
 
@@ -57,14 +60,14 @@ func TestConcurrentQueries(t *testing.T) {
 		/
 	`, strings.ToUpper(schemaName))
 
-	result, err = setupClient.ExecuteSQL(globalCtx, setupTableSQL)
+	result, err = setupClient.ExecuteSQL(ctx, setupTableSQL)
 	require.NoError(t, err, "Failed to set up test table")
 	require.True(t, result.Success, "Test table setup should be successful")
 
 	// Clean up after the test
 	defer func() {
 		dropSchemaSQL := fmt.Sprintf(`DROP USER %s CASCADE;`, strings.ToUpper(schemaName))
-		_, err := setupClient.ExecuteSQL(globalCtx, dropSchemaSQL)
+		_, err := setupClient.ExecuteSQL(ctx, dropSchemaSQL)
 		if err != nil {
 			t.Logf("Failed to drop test schema: %v", err)
 		}
@@ -99,7 +102,7 @@ func TestConcurrentQueries(t *testing.T) {
 					ORDER BY id;
 				`, strings.ToUpper(schemaName), numClients, clientID%numClients)
 
-				result, err := client.ExecuteSQL(globalCtx, querySQL)
+				result, err := client.ExecuteSQL(ctx, querySQL)
 				if err != nil {
 					resultsChan <- fmt.Sprintf("Client %d error: %v", clientID, err)
 					return
@@ -155,7 +158,7 @@ func TestConcurrentQueries(t *testing.T) {
 					SELECT COUNT(*) FROM concurrent_test_table;
 				`, strings.ToUpper(schemaName))
 
-				result, err := client.ExecuteSQL(globalCtx, readSQL)
+				result, err := client.ExecuteSQL(ctx, readSQL)
 				if err != nil {
 					resultsChan <- fmt.Sprintf("Reader %d error: %v", readerID, err)
 					return
@@ -192,7 +195,7 @@ func TestConcurrentQueries(t *testing.T) {
 					SELECT COUNT(*) FROM concurrent_test_table WHERE id BETWEEN %d AND %d;
 				`, strings.ToUpper(schemaName), baseID, baseID, baseID, baseID+9)
 
-				result, err := client.ExecuteSQL(globalCtx, writeSQL)
+				result, err := client.ExecuteSQL(ctx, writeSQL)
 				if err != nil {
 					resultsChan <- fmt.Sprintf("Writer %d error: %v", writerID, err)
 					return
@@ -229,7 +232,7 @@ func TestConcurrentQueries(t *testing.T) {
 		client := CreateFixedClient(t)
 		defer client.Close()
 
-		result, err := client.ExecuteSQL(globalCtx, verifySQL)
+		result, err := client.ExecuteSQL(ctx, verifySQL)
 		require.NoError(t, err, "Failed to execute verification query")
 		require.True(t, result.Success, "Verification query should be successful")
 
@@ -278,7 +281,7 @@ func TestConcurrentQueries(t *testing.T) {
 						) WHERE ROWNUM <= %d;
 					`, strings.ToUpper(schemaName), offset, limit)
 
-					_, err := client.ExecuteSQL(globalCtx, querySQL)
+					_, err := client.ExecuteSQL(ctx, querySQL)
 					if err != nil {
 						errorsChan <- fmt.Errorf("read operation %d failed: %w", opID, err)
 					}
@@ -298,7 +301,7 @@ func TestConcurrentQueries(t *testing.T) {
 						/
 					`, strings.ToUpper(schemaName), opID, startID, endID)
 
-					_, err := client.ExecuteSQL(globalCtx, updateSQL)
+					_, err := client.ExecuteSQL(ctx, updateSQL)
 					if err != nil {
 						errorsChan <- fmt.Errorf("write operation %d failed: %w", opID, err)
 					}
@@ -333,7 +336,7 @@ func TestConcurrentQueries(t *testing.T) {
 		client := CreateFixedClient(t)
 		defer client.Close()
 
-		result, err := client.ExecuteSQL(globalCtx, verifySQL)
+		result, err := client.ExecuteSQL(ctx, verifySQL)
 		require.NoError(t, err, "Failed to execute verification query after stress test")
 		require.True(t, result.Success, "Database should still be functional after stress test")
 		t.Logf("Final record count after stress test: %s", result.Message)

@@ -27,7 +27,7 @@ func TestSQLclRawExecution(t *testing.T) {
 		sqlclPath := os.Getenv("SQLCL_PATH")
 		if sqlclPath == "" {
 			// Default to the one typically used in the container tests
-			sqlclPath = "/home/jaco/Sources/sqlcl-25.1.1.113.2054/bin/sql"
+			sqlclPath = "sql"
 		}
 
 		// Ensure the file exists

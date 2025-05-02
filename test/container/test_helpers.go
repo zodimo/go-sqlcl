@@ -31,7 +31,7 @@ func DefaultContainerTestConfig() *ContainerTestConfig {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
 
 	return &ContainerTestConfig{
-		SQLclPath:       "/home/jaco/Sources/sqlcl-25.1.1.113.2054/bin/sql",
+		SQLclPath:       "sql",
 		Timeout:         30 * time.Second,
 		ContainerConfig: DefaultOracleContainerConfig(),
 		Context:         ctx,

@@ -7,6 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
+	"os"
 	"os/exec"
 	"sync"
 	"time"
@@ -89,8 +91,15 @@ func (p *SQLCLProcess) Start(ctx context.Context) error {
 		return ErrProcessAlreadyRunning
 	}
 
+	// Add debug logging if enabled
+	if os.Getenv("SQLCL_DEBUG") == "true" {
+		log.Printf("Starting SQLcl process with path: %s", p.path)
+	}
+
 	// Create a new command with the SQLcl path and any additional arguments
-	args := append([]string{"-S"}, p.args...)
+	// For SQLcl 25.1 and later, use different arguments to improve stability
+	// Instead of -S flag which might cause issues, use nologin option
+	args := append([]string{"-nologin"}, p.args...)
 	p.cmd = exec.CommandContext(ctx, p.path, args...)
 
 	// Set up pipes for stdin, stdout, and stderr
@@ -109,6 +118,12 @@ func (p *SQLCLProcess) Start(ctx context.Context) error {
 	p.stderr, err = p.cmd.StderrPipe()
 	if err != nil {
 		return fmt.Errorf("failed to create stderr pipe: %w", err)
+	}
+
+	// Debug: Add environment variables for diagnostics if needed
+	if os.Getenv("SQLCL_DEBUG") == "true" {
+		p.cmd.Env = append(os.Environ(), "JAVA_TOOL_OPTIONS=-Xms128m -Xmx512m")
+		log.Printf("Starting SQLcl with command: %v", p.cmd.Args)
 	}
 
 	// Start the process

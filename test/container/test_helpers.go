@@ -2,6 +2,7 @@ package container
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -30,7 +31,7 @@ func DefaultContainerTestConfig() *ContainerTestConfig {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
 
 	return &ContainerTestConfig{
-		SQLclPath:       "sql",
+		SQLclPath:       "/home/jaco/Sources/sqlcl-25.1.1.113.2054/bin/sql",
 		Timeout:         30 * time.Second,
 		ContainerConfig: DefaultOracleContainerConfig(),
 		Context:         ctx,
@@ -85,4 +86,57 @@ func TeardownContainerTest(t *testing.T, ctx context.Context, container testcont
 		err := container.Terminate(ctx)
 		require.NoError(t, err, "Failed to terminate container")
 	}
+}
+
+// CreateFixedClient creates a new client using the fixed implementation
+func CreateFixedClient(t *testing.T) types.Client {
+	t.Helper()
+
+	// Get container test config
+	config := DefaultContainerTestConfig()
+
+	// Create client config
+	clientConfig := &types.ClientConfig{
+		SQLclPath:      config.SQLclPath,
+		Timeout:        config.Timeout,
+		ConnectTimeout: 15 * time.Second,
+		QueryTimeout:   60 * time.Second,
+		ColorOutput:    false,
+		Format:         "table",
+		LogLevel:       "info",
+	}
+
+	// Create a fixed client instead of the standard client
+	fixedClient, err := sqlcl.NewFixedClient(clientConfig)
+	require.NoError(t, err, "Failed to create SQLcl fixed client")
+
+	// Connect to the database
+	// Build connection string using the format we know works from our direct tests
+	host, port, err := parseConnectStr(globalConnOpts.ConnectStr)
+	require.NoError(t, err, "Failed to parse connect string")
+
+	// For Oracle 18c, use a connect string with service name explicitly specified
+	connString := fmt.Sprintf("%s/%s@%s:%s/%s",
+		globalConnOpts.Username,
+		globalConnOpts.Password,
+		host, port, "XEPDB1")
+
+	t.Logf("Connecting with: %s", connString)
+
+	// Try to connect with retries
+	var connectErr error
+	maxRetries := 3
+	retryDelay := 1 * time.Second
+
+	for i := 0; i < maxRetries; i++ {
+		connectErr = fixedClient.Connect(globalCtx, connString)
+		if connectErr == nil {
+			break
+		}
+		t.Logf("Connection attempt %d failed: %v. Retrying in %v...", i+1, connectErr, retryDelay)
+		time.Sleep(retryDelay)
+	}
+	require.NoError(t, connectErr, "Failed to connect to the database after %d attempts", maxRetries)
+
+	return fixedClient
 }

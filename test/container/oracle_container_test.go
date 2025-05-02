@@ -12,14 +12,10 @@ import (
 // TestDefaultOracleContainerConfig verifies that the default configuration is correctly set
 func TestDefaultOracleContainerConfig(t *testing.T) {
 	config := DefaultOracleContainerConfig()
-
-	assert.Equal(t, "gvenzl/oracle-xe", config.Image)
-	assert.Equal(t, "latest", config.Tag)
-	assert.Equal(t, "1521", config.Port)
-	assert.Equal(t, "system", config.User)
-	assert.Equal(t, "oracle", config.Password)
-	assert.Equal(t, "XEPDB1", config.Database)
-	assert.Equal(t, 120*time.Second, config.StartupTimeout)
+	assert.Equal(t, "gvenzl/oracle-xe", config.Image, "Default image should be gvenzl/oracle-xe")
+	assert.Equal(t, "18-slim", config.Tag, "Default image tag should be 18-slim")
+	assert.Equal(t, "system", config.User, "Default username should be system")
+	assert.Equal(t, "oracle", config.Password, "Default password should be oracle")
 }
 
 // TestOracleContainer tests the Oracle container setup

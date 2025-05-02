@@ -52,7 +52,7 @@ type OracleContainerConfig struct {
 func DefaultOracleContainerConfig() *OracleContainerConfig {
 	return &OracleContainerConfig{
 		Image:          "gvenzl/oracle-xe",
-		Tag:            "latest",
+		Tag:            "18-slim",
 		Port:           defaultOraclePort,
 		HostPort:       defaultOracleHostPort,
 		User:           defaultUser,
@@ -142,7 +142,13 @@ func GetConnectionOptionsFromContainer(ctx context.Context, container testcontai
 	}
 
 	// Create the Oracle connection string
+	// Note: For Oracle Database XE 21c and above, we need to specify the service name
 	connectStr := fmt.Sprintf("%s:%d/%s", host, portNum, config.Database)
+
+	// Print debug information
+	fmt.Printf("DEBUG: Oracle connection string: %s\n", connectStr)
+	fmt.Printf("DEBUG: Oracle username: %s\n", config.User)
+	fmt.Printf("DEBUG: Oracle password: %s\n", config.Password)
 
 	// Return connection options
 	return types.ConnectionOptions{

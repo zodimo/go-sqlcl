@@ -70,6 +70,24 @@ For detailed documentation, see the [docs](./docs) directory.
 
 For more examples, see the [examples](./examples) directory.
 
+## Testing
+
+This package supports multiple testing approaches:
+
+### Unit Tests
+
+Standard Go unit tests that don't require external resources.
+
+### Integration Tests
+
+Tests that require a working SQLcl installation and optionally a local Oracle database.
+
+### Container-Based Tests
+
+For more reliable and reproducible testing, this project includes container-based tests using [testcontainers-go](https://github.com/testcontainers/testcontainers-go) with Oracle XE containers. This approach eliminates the need for a local Oracle installation, making it easier to run tests in CI/CD environments.
+
+See [test/README.md](./test/README.md) for detailed information on how to run the different types of tests.
+
 ## SQLcl Documentation
 
 For more information about Oracle SQLcl, see the official documentation:
